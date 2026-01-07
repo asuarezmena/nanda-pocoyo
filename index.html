@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Nuestro Calendario ❤️</title>
+
+<style>
+
+body{
+  font-family: "Poppins", sans-serif;
+  text-align:center;
+  background: linear-gradient(180deg, #fff0f6, #ffffff);
+  min-height:100vh;
+  margin:0;
+  padding:20px;
+  color:#5c2a3d;
+}
+
+
+.calendar{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  width:100%;
+  max-width:420px;
+  margin:0 auto;
+  gap:10px;
+  background:#ffffff;
+  padding:16px;
+  border-radius:24px;
+  box-shadow:0 10px 30px rgba(200,50,100,.15);
+}
+
+
+
+.calendar-wrapper{
+  width:100%;
+  display:flex;
+  justify-content:center;
+}
+
+
+
+.day{
+  aspect-ratio:1;
+  width:100%;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:500;
+  transition:.3s;
+}
+
+
+
+.disabled{ color:#ccc; }
+.past{ color:#e57373; }
+
+
+
+.today{
+  background: radial-gradient(circle, #ffb3c6, #ff5c8a);
+  color:white;
+  cursor:pointer;
+  font-size:22px;
+  box-shadow:0 0 0 6px rgba(255,92,138,.15);
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(255,92,138,.5);}
+  70%{box-shadow:0 0 0 10px rgba(255,92,138,0);}
+  100%{box-shadow:0 0 0 0 rgba(255,92,138,0);}
+}
+
+
+
+.marked{
+  background:#ffe3ec;
+  box-shadow:0 0 0 4px rgba(255,92,138,.3);
+  font-size:22px;
+}
+
+
+
+.sad{ font-size:20px; }
+
+.modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  background:rgba(255,182,193,.6);
+  backdrop-filter:blur(6px);
+  align-items:center;
+  justify-content:center;
+  z-index:10;
+}
+
+
+.modal-box{
+  background:linear-gradient(180deg,#fff,#ffe6f0);
+  padding:30px 25px;
+  border-radius:24px;
+  max-width:320px;
+  box-shadow:0 15px 40px rgba(200,50,100,.25);
+  animation:pop .4s ease;
+}
+
+@keyframes pop{
+  from{transform:scale(.8); opacity:0;}
+  to{transform:scale(1); opacity:1;}
+}
+
+
+#modalText{
+  font-size:18px;
+  line-height:1.5;
+  margin-bottom:20px;
+}
+
+
+.modal-box button{
+  background:#ff5c8a;
+  border:none;
+  padding:10px 18px;
+  border-radius:20px;
+  color:white;
+  font-size:14px;
+  cursor:pointer;
+}
+
+
+
+
+
+@media (max-width:480px){
+  .calendar{
+    padding:12px;
+    gap:8px;
+  }
+
+  #monthTitle{
+    font-size:26px;
+  }
+}
+
+
+
+
+
+
+
+
+.history-title{
+  margin-top:50px;
+  font-size:16px;
+  opacity:.6;
+}
+
+
+.history-month{
+  background:#ffffff;
+  padding:16px;
+  border-radius:20px;
+  box-shadow:0 8px 20px rgba(200,50,100,.12);
+  max-width:320px;
+  width:100%;
+}
+
+
+
+.history-month h3{
+  font-size:14px;
+  margin-bottom:12px;
+  text-transform:capitalize;
+  text-align:center;
+  color:#c94b78;
+}
+
+
+
+.mini-calendar{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:6px;
+  width:100%;
+}
+
+
+
+.mini-calendar .day{
+  aspect-ratio:1;
+  width:100%;
+  font-size:12px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+
+
+
+
+
+#history{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:32px;
+  width:100%;
+}
+
+
+
+
+
+
+
+#monthTitle{
+  font-size:32px;
+  margin-bottom:25px;
+  text-transform:capitalize;
+  color:#c2185b;
+  letter-spacing:1px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.month-cover{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-bottom:24px;
+}
+
+.heart-frame{
+  width:220px;
+  height:200px;
+  clip-path:polygon(
+    50% 90%,
+    0% 40%,
+    25% 0%,
+    50% 20%,
+    75% 0%,
+    100% 40%
+  );
+  background:#ffd6e7;
+  padding:8px;
+  box-shadow:0 12px 30px rgba(200,50,100,.25);
+}
+
+.heart-frame img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:12px;
+}
+
+.month-quote{
+  margin-top:14px;
+  font-size:15px;
+  color:#c94b78;
+  max-width:320px;
+  text-align:center;
+  line-height:1.4;
+}
+
+
+
+
+
+.music-toggle{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#ffd6e7;
+  border:none;
+  border-radius:50%;
+  width:48px;
+  height:48px;
+  font-size:20px;
+  cursor:pointer;
+  box-shadow:0 6px 20px rgba(200,50,100,.3);
+}
+
+
+
+</style>
+
+
+</head>
+<body>
+
+
+<div class="month-cover">
+  <div class="heart-frame">
+    <img id="monthImage" src="" alt="Nuestro mes">
+  </div>
+  <p class="month-quote" id="monthQuote"></p>
+</div>
+
+<h1 id="monthTitle"></h1>
+<div class="calendar-wrapper">
+  <div class="calendar" id="calendar"></div>
+</div>
+
+<h2 class="history-title">Meses anteriores</h2>
+<div id="history"></div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <p id="modalText"></p>
+    <button onclick="closeModal()">Cerrar</button>
+  </div>
+</div>
+
+
+
+
+
+
+
+<audio id="loveMusic" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_aa5d6c90b1.mp3" type="audio/mpeg">
+</audio>
+
+<button class="music-toggle" onclick="toggleMusic()">🔈</button>
+
+
+
+
+
+<script>
+
+const API_URL = "https://script.google.com/macros/s/AKfycbybPDdOWcpzwZvVEDxyEVmgbIju7hRTqSfyVdylDWM9uVqgobb_RGdxKwhNsYJBrYjKjQ/exec";
+
+const calendar = document.getElementById("calendar");
+const monthTitle = document.getElementById("monthTitle");
+const modal = document.getElementById("modal");
+const modalText = document.getElementById("modalText");
+
+let mensajes = {};
+let registro = {};
+
+
+
+
+
+const monthImages = {
+  0: {
+    img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e",
+    quote: "Comenzar el año contigo es mi mejor decisión 💖"
+  },
+  1: {
+    img: "https://images.unsplash.com/photo-1517841905240-472988babdf9",
+    quote: "Febrero contigo siempre será especial 💕"
+  },
+  2: {
+    img: "https://images.unsplash.com/photo-1495567720989-cebdbdd97913",
+    quote: "Nuestro amor también florece 🌸"
+  }
+  // luego puedes completar hasta diciembre
+};
+
+
+
+
+
+const today = new Date();
+today.setHours(0,0,0,0);
+
+fetch(API_URL)
+.then(r => r.json())
+.then(data => {
+  mensajes = data.mensajes;
+  registro = data.registro;
+  const now = new Date(); // ← luego lo usaremos para probar febrero
+  renderCalendar(now);
+  renderHistory(now);     // ✅ AQUÍ SÍ
+});
+
+function renderCalendar(date){
+  calendar.innerHTML = "";
+
+  const y = date.getFullYear();
+  const m = date.getMonth();
+
+
+const cover = monthImages[m];
+if(cover){
+  document.getElementById("monthImage").src = cover.img;
+  document.getElementById("monthQuote").textContent = cover.quote;
+}
+
+
+
+  monthTitle.textContent = date.toLocaleDateString("es", {
+    month: "long",
+    year: "numeric"
+  });
+
+  const first = new Date(y, m, 1);
+  const start = new Date(first);
+  start.setDate(start.getDate() - first.getDay());
+
+  for(let i = 0; i < 42; i++){
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+
+    const iso = d.toISOString().split("T")[0];
+
+    const div = document.createElement("div");
+    div.className = "day";
+    div.textContent = d.getDate();
+
+    if(d.getMonth() !== m){
+      div.classList.add("disabled");
+    }
+    else if(registro[iso]){
+      div.textContent = registro[iso].estado === "marcado" ? "❤️" : "😢";
+      div.classList.add("marked");
+    }
+    else if(d < today){
+      div.classList.add("past");
+    }
+    else if(d.getTime() === today.getTime()){
+      div.classList.add("today");
+      div.onclick = () => markDay(iso, div);
+    }
+
+    calendar.appendChild(div);
+  }
+}
+
+
+
+function markDay(date, el){
+  modalText.textContent = mensajes[date] || "💖 Hoy no había mensaje, pero te amo";
+
+  modal.style.display = "flex";
+
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      fecha: date,
+      estado: "marcado"
+    })
+  });
+
+  el.textContent = "❤️";
+  el.className = "day marked";
+
+  confettiHearts();
+  playMusic();
+}
+
+function closeModal(){
+  modal.style.display = "none";
+}
+
+
+
+
+function confettiHearts(){
+  for(let i=0;i<20;i++){
+    const heart = document.createElement("div");
+    heart.innerText = "❤️";
+    heart.style.position = "fixed";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.top = "-20px";
+    heart.style.fontSize = "24px";
+    heart.style.animation = "fall 2.5s linear";
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 2500);
+  }
+}
+
+const style = document.createElement("style");
+style.innerHTML = `
+@keyframes fall {
+  to {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}`;
+document.head.appendChild(style);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getPastMonths(currentDate) { const months = []; const date = new Date(currentDate); date.setDate(1); while (true) { date.setMonth(date.getMonth() - 1); if (date.getFullYear() < currentDate.getFullYear() || date.getMonth() < currentDate.getMonth()) { months.push(new Date(date)); } if (date.getMonth() === 0) break; } return months.reverse(); }
+
+
+
+
+
+
+
+
+function renderMiniCalendar(date) {
+  const container = document.createElement("div");
+  container.className = "history-month";
+
+  const title = document.createElement("h3");
+  title.textContent = date.toLocaleDateString("es", {
+    month: "long",
+    year: "numeric"
+  });
+
+  const grid = document.createElement("div");
+  grid.className = "mini-calendar";
+
+  const y = date.getFullYear();
+  const m = date.getMonth();
+
+  const first = new Date(y, m, 1);
+  const start = new Date(first);
+  start.setDate(start.getDate() - first.getDay());
+
+  for (let i = 0; i < 42; i++) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    const iso = d.toISOString().split("T")[0];
+
+    const cell = document.createElement("div");
+    cell.className = "day";
+    cell.textContent = d.getDate();
+
+    if (d.getMonth() !== m) {
+      cell.classList.add("disabled");
+    } else if (registro[iso]) {
+      cell.textContent =
+        registro[iso].estado === "marcado" ? "❤️" : "😢";
+    } else {
+      cell.classList.add("disabled");
+    }
+
+    grid.appendChild(cell);
+  }
+
+  container.appendChild(title);
+  container.appendChild(grid);
+  return container;
+}
+
+
+
+
+function renderHistory(currentDate) {
+  const history = document.getElementById("history");
+  history.innerHTML = "";
+
+  const pastMonths = getPastMonths(currentDate);
+
+  pastMonths.forEach(month => {
+    history.appendChild(renderMiniCalendar(month));
+  });
+}
+
+
+
+
+
+
+
+
+
+
+const music = document.getElementById("loveMusic");
+let musicOn = false;
+
+function playMusic(){
+  if(!musicOn){
+    music.volume = 0.3;
+    music.play();
+    musicOn = true;
+  }
+}
+
+function toggleMusic(){
+  if(music.paused){
+    music.play();
+  }else{
+    music.pause();
+  }
+}
+
+
+
+</script>
+</body>
+</html>
