@@ -250,21 +250,38 @@ body{
   margin-bottom:24px;
 }
 
-.heart-frame{
-  width:220px;
-  height:200px;
-  clip-path:polygon(
-    50% 90%,
-    0% 40%,
-    25% 0%,
-    50% 20%,
-    75% 0%,
-    100% 40%
-  );
-  background:#ffd6e7;
-  padding:8px;
-  box-shadow:0 12px 30px rgba(200,50,100,.25);
+.heart-photo{
+  width:240px;
+  aspect-ratio:1;
+  background:linear-gradient(135deg,#ffb3c6,#ff5c8a);
+  padding:10px;
+  border-radius:32px;
+  box-shadow:0 18px 40px rgba(200,50,100,.35);
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
+
+.heart-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+
+  /* 💖 CORAZÓN REAL */
+  mask-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 29'>\
+<path d='M23.6,0c-3.4,0-6.4,2-7.6,4.9C14.8,2,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,20.6,16,20.6S32,17.8,32,8.4C32,3.8,28.2,0,23.6,0z'/>\
+</svg>");
+  mask-size:contain;
+  mask-repeat:no-repeat;
+  mask-position:center;
+
+  -webkit-mask-image: inherit;
+  -webkit-mask-size:contain;
+  -webkit-mask-repeat:no-repeat;
+  -webkit-mask-position:center;
+}
+
 
 .heart-frame img{
   width:100%;
@@ -302,17 +319,122 @@ body{
 
 
 
+
+
+
+
+
+
+
+
+
+/* ===== INTRO ===== */
+.intro{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(135deg,#fff0f6,#ffe3ec);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+  animation:fadeIn 1s ease;
+}
+
+.intro-card{
+  background:white;
+  padding:40px 30px;
+  border-radius:28px;
+  text-align:center;
+  max-width:320px;
+  box-shadow:0 25px 60px rgba(200,50,100,.25);
+  animation:float 3s ease-in-out infinite;
+}
+
+.intro-card h1{
+  color:#c2185b;
+  margin-bottom:12px;
+  font-size:26px;
+}
+
+.intro-card p{
+  font-size:15px;
+  color:#555;
+  line-height:1.5;
+  margin-bottom:30px;
+}
+
+.heart-btn{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  border:none;
+  font-size:34px;
+  background:#ff5c8a;
+  color:white;
+  cursor:pointer;
+  box-shadow:0 10px 25px rgba(255,92,138,.4);
+  animation:pulse 1.5s infinite;
+}
+
+.heart-btn:hover{
+  transform:scale(1.05);
+}
+
+.hint{
+  display:block;
+  margin-top:16px;
+  font-size:13px;
+  color:#999;
+}
+
+/* Animaciones */
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.1)}
+  100%{transform:scale(1)}
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+
 </style>
 
 
 </head>
 <body>
 
+<div id="intro" class="intro">
+  <div class="intro-card">
+    <h1>Para ti 💖</h1>
+    <p>
+      Cada día a tu lado es especial.<br>
+      Toca el corazón y comencemos esta historia.
+    </p>
+
+    <button class="heart-btn" onclick="startExperience()">
+      ❤️
+    </button>
+
+    <span class="hint">Toca el corazón</span>
+  </div>
+</div>
+
+
+
+
 
 <div class="month-cover">
-  <div class="heart-frame">
-    <img id="monthImage" src="" alt="Nuestro mes">
-  </div>
+  <div class="heart-photo">
+  <img id="monthImage" src="" alt="Nuestro mes">
+</div>
   <p class="month-quote" id="monthQuote"></p>
 </div>
 
@@ -338,7 +460,7 @@ body{
 
 
 <audio id="loveMusic" loop>
-  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_aa5d6c90b1.mp3" type="audio/mpeg">
+  <source src="https://raw.githubusercontent.com/asuarezmena/nanda-pocoyo/main/audio/Morat%20-%20Mi%20Nuevo%20Vicio.mp3" type="audio/mpeg">
 </audio>
 
 <button class="music-toggle" onclick="toggleMusic()">🔈</button>
@@ -365,7 +487,7 @@ let registro = {};
 
 const monthImages = {
   0: {
-    img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e",
+    img: "https://raw.githubusercontent.com/asuarezmena/nanda-pocoyo/main/img/enero.png",
     quote: "Comenzar el año contigo es mi mejor decisión 💖"
   },
   1: {
@@ -378,6 +500,52 @@ const monthImages = {
   }
   // luego puedes completar hasta diciembre
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function startExperience(){
+  music.volume = 0.25;
+
+  music.play()
+    .then(() => {
+      musicOn = true;
+    })
+    .catch(err => {
+      console.log("Audio bloqueado hasta interacción", err);
+    });
+
+  const intro = document.getElementById("intro");
+  intro.style.transition = "opacity .8s ease";
+  intro.style.opacity = "0";
+  intro.style.pointerEvents = "none";
+
+  setTimeout(() => {
+    intro.style.display = "none";
+  }, 800);
+
+  localStorage.setItem("introSeen","true");
+}
+
+
+
 
 
 
@@ -527,7 +695,17 @@ document.head.appendChild(style);
 
 
 
-function getPastMonths(currentDate) { const months = []; const date = new Date(currentDate); date.setDate(1); while (true) { date.setMonth(date.getMonth() - 1); if (date.getFullYear() < currentDate.getFullYear() || date.getMonth() < currentDate.getMonth()) { months.push(new Date(date)); } if (date.getMonth() === 0) break; } return months.reverse(); }
+function getPastMonths(currentDate) {
+  const months = [];
+  const currentMonth = currentDate.getMonth();
+  const year = currentDate.getFullYear();
+
+  for (let m = 0; m < currentMonth; m++) {
+    months.push({ year, month: m });
+  }
+
+  return months;
+}
 
 
 
