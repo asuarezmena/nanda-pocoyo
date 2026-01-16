@@ -600,11 +600,37 @@ body{
 <div class="modal" id="modal">
   <div class="modal-box">
     <p id="modalText"></p>
+    <button onclick="openReply()">Responder 💌</button>
+    <br><br>
     <button onclick="closeModal()">Cerrar</button>
   </div>
 </div>
 
 
+
+<div class="modal" id="replyModal">
+  <div class="modal-box">
+    <h3 style="color:#c2185b;margin-bottom:10px">
+      Escríbeme algo bonito 💖
+    </h3>
+
+    <textarea id="replyText"
+      placeholder="Escribe aquí con amor… 💕"
+      style="
+        width:100%;
+        height:120px;
+        border-radius:16px;
+        border:1px solid #ffd6e7;
+        padding:12px;
+        font-family:Poppins;
+        resize:none;
+      "></textarea>
+
+    <br><br>
+    <button onclick="sendReply()">Enviar 💕</button>
+    <button onclick="closeReply()">Cancelar</button>
+  </div>
+</div>
 
 
 
@@ -1058,6 +1084,59 @@ function hideTooltip(){
 
 
 
+
+
+
+
+
+let currentDateSelected = null;
+
+// interceptamos la fecha cuando abre el mensaje
+const originalMarkDay = markDay;
+markDay = function(date, el){
+  currentDateSelected = date;
+  originalMarkDay(date, el);
+};
+
+function openReply(){
+  document.getElementById("replyModal").style.display = "flex";
+}
+
+function closeReply(){
+  document.getElementById("replyModal").style.display = "none";
+}
+
+function sendReply(){
+  const text = document.getElementById("replyText").value.trim();
+  if(!text){
+    alert("Escribe algo primero 💗");
+    return;
+  }
+
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      tipo: "respuesta",
+      fecha: currentDateSelected,
+      mensaje: text
+    })
+  })
+  .then(() => {
+    document.getElementById("replyText").value = "";
+    closeReply();
+    closeModal();
+    alert("Mensaje enviado con amor 💌");
+  });
+}
+
+
+
+
+
+
+
+
+  
 
 
 
