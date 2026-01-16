@@ -30,31 +30,42 @@ body{
   position: absolute;
   background: #fff;
   color: #c2185b;
-  padding: 10px 14px;
-  border-radius: 14px;
+
+  padding: 22px 16px 14px; /* ⬅️ MÁS ESPACIO ARRIBA */
+
+  border-radius: 16px;
   font-size: 14px;
-  max-width: 220px;
-  line-height: 1.4;
-  box-shadow: 0 10px 30px rgba(200,50,100,.25);
+  max-width: 240px;
+  line-height: 1.5;
+
+  box-shadow: 0 12px 35px rgba(200,50,100,.25);
   z-index: 1000;
 
   opacity: 0;
   transform: translateY(6px);
   transition: opacity .2s ease, transform .2s ease;
-  pointer-events: auto; /* IMPORTANTE */
+  pointer-events: auto;
 }
+
 
 
 
 .tooltip-close {
   position: absolute;
-  top: 6px;
+  top: 8px;
   right: 10px;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   color: #ff5c8a;
   font-weight: bold;
+  opacity: .8;
 }
+
+.tooltip-close:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
 
   
 .tooltip::after {
@@ -148,6 +159,10 @@ body{
   justify-content:center;
   font-weight:500;
   transition:.3s;
+
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 
@@ -557,6 +572,7 @@ body{
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none;     /* Edge antiguo */
   -moz-user-select: none;    /* Firefox */
+  -webkit-touch-callout: none; /* iOS */
 }
 
 
@@ -1128,7 +1144,12 @@ function toggleMusic(){
 
 
 function addTooltipEvents(el, text){
-  el.addEventListener("click", e => {
+  el.style.cursor = "pointer";
+
+  el.addEventListener("pointerup", e => {
+    e.preventDefault();
+    e.stopPropagation();
+
     const rect = el.getBoundingClientRect();
 
     document.getElementById("tooltipText").textContent = text;
@@ -1137,11 +1158,12 @@ function addTooltipEvents(el, text){
       rect.left + rect.width / 2 + "px";
 
     tooltip.style.top =
-      rect.top - 12 + window.scrollY + "px";
+      rect.top - 16 + window.scrollY + "px";
 
     tooltip.classList.add("show");
   });
 }
+
 
 
 
@@ -1233,6 +1255,19 @@ function closeTooltip(){
   
 
 
+
+
+
+document.addEventListener("pointerdown", e => {
+  if (!tooltip.contains(e.target) && !e.target.classList.contains("day")) {
+    closeTooltip();
+  }
+});
+
+
+
+  
+  
 
 
 
