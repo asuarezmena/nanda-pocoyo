@@ -37,12 +37,26 @@ body{
   line-height: 1.4;
   box-shadow: 0 10px 30px rgba(200,50,100,.25);
   z-index: 1000;
-  pointer-events: none;
+
   opacity: 0;
   transform: translateY(6px);
   transition: opacity .2s ease, transform .2s ease;
+  pointer-events: auto; /* IMPORTANTE */
 }
 
+
+
+.tooltip-close {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #ff5c8a;
+  font-weight: bold;
+}
+
+  
 .tooltip::after {
   content: "";
   position: absolute;
@@ -690,7 +704,11 @@ body{
 <button class="music-toggle" onclick="toggleMusic()">🔈</button>
 
 
-<div id="tooltip" class="tooltip"></div>
+<div id="tooltip" class="tooltip">
+  <span class="tooltip-close" onclick="closeTooltip()">✕</span>
+  <div id="tooltipText"></div>
+</div>
+
 
 
 
@@ -1110,16 +1128,25 @@ function toggleMusic(){
 
 
 function addTooltipEvents(el, text){
-  el.addEventListener("pointerdown", e => {
-    tooltip.textContent = text;
-    tooltip.style.left = e.pageX + "px";
-    tooltip.style.top = (e.pageY - 50) + "px";
+  el.addEventListener("click", e => {
+    const rect = el.getBoundingClientRect();
+
+    document.getElementById("tooltipText").textContent = text;
+
+    tooltip.style.left =
+      rect.left + rect.width / 2 + "px";
+
+    tooltip.style.top =
+      rect.top - 12 + window.scrollY + "px";
+
     tooltip.classList.add("show");
   });
-
-  el.addEventListener("pointerup", hideTooltip);
-  el.addEventListener("pointerleave", hideTooltip);
 }
+
+
+
+
+  
 
 function hideTooltip(){
   tooltip.classList.remove("show");
@@ -1195,8 +1222,11 @@ function sendReply(){
 
 
 
+  
 
-
+function closeTooltip(){
+  tooltip.classList.remove("show");
+}
 
 
 
