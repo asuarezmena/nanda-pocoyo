@@ -50,6 +50,18 @@ body{
 
 
 
+
+.tooltip,
+.tooltip * {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+  
+
+
+
 .tooltip-close {
   position: absolute;
   top: 8px;
@@ -160,6 +172,8 @@ body{
   font-weight:500;
   transition:.3s;
 
+  pointer-events: none;
+  
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
@@ -859,65 +873,50 @@ function renderCalendar(date){
 
   // 🔹 AQUÍ SE DIBUJAN LOS DÍAS
   for(let i = 0; i < 42; i++){
-    const d = new Date(start);
-    d.setDate(start.getDate() + i);
+  const d = new Date(start);
+  d.setDate(start.getDate() + i);
 
-    const iso = d.toISOString().split("T")[0];
+  const iso = d.toISOString().split("T")[0];
 
-    const div = document.createElement("div");
-    div.className = "day";
-    div.textContent = d.getDate();
+  const div = document.createElement("div");
+  div.className = "day";
+  div.textContent = d.getDate();
 
-    if(d.getMonth() !== m){
-      div.classList.add("disabled");
-    }
-    else if(registro[iso]){
-      div.textContent = registro[iso].estado === "marcado" ? "❤️" : "😢";
-      div.classList.add("marked");
-
-      const msg = mensajes[iso];
-      if(msg){
-        addTooltipEvents(div, msg);
-      }
-    }
-    // 🔴 DÍAS BLOQUEADOS ANTES DEL DÍA 7
-    if (d.getMonth() === m && d.getDate() < START_DAY) {
-      div.classList.add("past");
-    }
-
-    // 📌 DÍAS DE OTRO MES
-    else if(d.getMonth() !== m){
-      div.classList.add("disabled");
-    }
-
-    // ❤️ DÍAS YA MARCADOS
-    else if(registro[iso]){
-      div.textContent = registro[iso].estado === "marcado" ? "❤️" : "😢";
-      div.classList.add("marked");
-
-      const msg = mensajes[iso];
-      if(msg){
-        addTooltipEvents(div, msg);
-      }
-    }
-
-    // 🔴 DÍAS PASADOS (DESPUÉS DEL 7)
-    else if(d < today){
-      div.classList.add("past");
-    }
-
-    // 💖 DÍA ACTUAL (SOLO SI ES >= 7)
-    else if(
-      d.getTime() === today.getTime() &&
-      d.getDate() >= START_DAY
-    ){
-      div.classList.add("today");
-      div.onclick = () => markDay(iso, div);
-    }
-
-
-    calendar.appendChild(div);
+  // 📌 DÍAS DE OTRO MES
+  if(d.getMonth() !== m){
+    div.classList.add("disabled");
   }
+
+  // 🔴 DÍAS BLOQUEADOS ANTES DEL DÍA 7 (solo del mes actual)
+  else if(d.getMonth() === m && d.getDate() < START_DAY){
+    div.classList.add("past");
+  }
+
+  // ❤️ DÍAS YA MARCADOS
+  else if(registro[iso]){
+    div.textContent =
+      registro[iso].estado === "marcado" ? "❤️" : "😢";
+    div.classList.add("marked");
+
+    const msg = mensajes[iso];
+    if(msg){
+      addTooltipEvents(div, msg);
+    }
+  }
+
+  // 🔴 DÍAS PASADOS (DESPUÉS DEL 7)
+  else if(d < today){
+    div.classList.add("past");
+  }
+
+  // 💖 DÍA ACTUAL
+  else if(d.getTime() === today.getTime()){
+    div.classList.add("today");
+    div.onclick = () => markDay(iso, div);
+  }
+
+  calendar.appendChild(div);
+}
 
   // 🌸 👉 JUSTO AQUÍ VA TU BLOQUE (FUERA DEL FOR)
   setTimeout(() => {
@@ -1146,11 +1145,13 @@ function toggleMusic(){
 function addTooltipEvents(el, text){
   el.style.cursor = "pointer";
 
-  el.addEventListener("pointerup", e => {
+  el.addEventListener("pointerdown", e => {
     e.preventDefault();
     e.stopPropagation();
 
     const rect = el.getBoundingClientRect();
+
+    tooltip.classList.remove("show"); // reset seguro
 
     document.getElementById("tooltipText").textContent = text;
 
@@ -1160,9 +1161,12 @@ function addTooltipEvents(el, text){
     tooltip.style.top =
       rect.top - 16 + window.scrollY + "px";
 
-    tooltip.classList.add("show");
+    requestAnimationFrame(() => {
+      tooltip.classList.add("show");
+    });
   });
 }
+
 
 
 
