@@ -1208,14 +1208,25 @@ function renderHistory(currentDate) {
   const history = document.getElementById("history");
   history.innerHTML = "";
 
-  const currentMonth = currentDate.getMonth();
-  const year = currentDate.getFullYear();
+  const today = new Date();
+  today.setHours(0,0,0,0);
 
-  for(let m = 0; m < currentMonth; m++){
-    const date = new Date(year, m, 1);
-    history.appendChild(renderMiniCalendar(date));
+  for (let m = 0; m < 12; m++) {
+    const date = new Date(currentDate.getFullYear(), m, 1);
+
+    const endOfMonth = new Date(
+      date.getFullYear(),
+      date.getMonth() + 1,
+      0
+    );
+
+    // ✅ SOLO MESES COMPLETAMENTE PASADOS
+    if (endOfMonth < today) {
+      history.appendChild(renderMiniCalendar(date));
+    }
   }
 }
+
 
 
 
