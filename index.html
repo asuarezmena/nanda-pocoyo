@@ -21,11 +21,11 @@ body{
 
 
 .month-counter{
-  margin-top:8px;
-  font-size:14px;
-  color:#c94b78;
-  opacity:.85;
+  margin-top:14px;
   text-align:center;
+  font-size:15px;
+  line-height:1.4;
+  color:#5c2a3d;
 }
 
 
@@ -940,10 +940,9 @@ if (days > 0)
   timeHTML.push(`<span class="num">${days}</span> día${days > 1 ? "s" : ""}`);
 
 counterEl.innerHTML = `
-  <div class="thanks">Gracias</div>
-  <div class="subtitle">por estos:</div>
-  <div class="time">${timeHTML.join(" y ")}</div>
-  <div class="ending">juntos.</div>
+  <div>Gracias por estos:</div>
+  <div>${years} años, ${months} meses y ${days} días</div>
+  <div>juntos.</div>
 `;
 
   
