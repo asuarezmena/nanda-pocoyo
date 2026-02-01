@@ -975,6 +975,17 @@ function markDay(date, el){
   playMusic();
 }
 
+
+
+function openPastMessage(date){
+  modalText.textContent =
+    mensajes[date] || "💭 Este día no tenía mensaje guardado";
+
+  modal.style.display = "flex";
+}
+
+
+  
 function closeModal(){
   modal.style.display = "none";
 }
@@ -1081,9 +1092,16 @@ function renderMiniCalendar(date) {
 
     if (d.getMonth() !== m) {
       cell.classList.add("disabled");
-    } else if (registro[iso]) {
+    else if (registro[iso]) {
       cell.textContent =
         registro[iso].estado === "marcado" ? "❤️" : "😢";
+    
+      cell.style.cursor = "pointer";
+    
+      const msg = mensajes[iso];
+      if(msg){
+        cell.onclick = () => openPastMessage(iso);
+      }
     } else {
       cell.classList.add("disabled");
     }
