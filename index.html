@@ -1011,16 +1011,8 @@ function renderCalendar(date){
   `;
 
   calendar.appendChild(resumen);
-}
 
-
-
-
-
-
-  
-
-  // 🌸 👉 JUSTO AQUÍ VA TU BLOQUE (FUERA DEL FOR)
+  // 🌸 GUÍA PARA EL DÍA ACTUAL (CORRECTAMENTE DENTRO)
   setTimeout(() => {
     const todayISO = today.toISOString().split("T")[0];
 
@@ -1039,7 +1031,7 @@ function renderCalendar(date){
         todayCell,
         "💗 El mensaje de hoy ya fue leído. Mañana te espera otro 💫"
       );
-    }else{
+    } else {
       showGuideTooltip(
         todayCell,
         "💌 Tienes un mensajito de amor esperando… tócalo 💖"
@@ -1049,7 +1041,6 @@ function renderCalendar(date){
     localStorage.setItem(seenKey, "true");
   }, 600);
 }
-
 
 
 
