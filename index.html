@@ -899,10 +899,15 @@ fetch(API_URL)
 .then(data => {
   mensajes = data.mensajes;
   registro = data.registro;
-  const now = new Date(); // ← luego lo usaremos para probar febrero
+  const now = new Date();
   renderCalendar(now);
-  renderHistory(now);     // ✅ AQUÍ SÍ
+  renderHistory(now);
+
+  // ❤️ INICIAR CONTADOR EN TIEMPO REAL (UNA SOLA VEZ)
+  const counterEl = document.getElementById("monthCounter");
+  startLiveCounter(counterEl);
 });
+
 
 function renderCalendar(date){
   calendar.innerHTML = "";
@@ -918,38 +923,7 @@ function renderCalendar(date){
     document.getElementById("monthQuote").textContent = cover.quote;
   }
   
-  // 💖 CONTADOR SOLO EN FEBRERO
-  if (m === 1) { // febrero
-    const startDate = new Date(2025, 9, 7); // 7 octubre 2025
-    const today = new Date();
   
-    const { years, months, days } =
-      getRelationshipDuration(startDate, today);
-  
-    
-  
-    let timeHTML = [];
-
-if (years > 0)
-  timeHTML.push(`<span class="num">${years}</span> año${years > 1 ? "s" : ""}`);
-
-if (months > 0)
-  timeHTML.push(`<span class="num">${months}</span> mes${months > 1 ? "es" : ""}`);
-
-if (days > 0)
-  timeHTML.push(`<span class="num">${days}</span> día${days > 1 ? "s" : ""}`);
-
-counterEl.innerHTML = `
-  <div>Gracias por estos:</div>
-  <div>${years} años, ${months} meses y ${days} días</div>
-  <div>juntos.</div>
-`;
-
-  
-    counterEl.style.display = "block";
-  } else {
-    counterEl.style.display = "none";
-  }
 
 
 
@@ -1418,10 +1392,56 @@ function getRelationshipDuration(startDate, currentDate){
 
 
 
+  function getLiveRelationshipTime(startDate) {
+    const now = new Date();
   
+    let years = now.getFullYear() - startDate.getFullYear();
+    let months = now.getMonth() - startDate.getMonth();
+    let days = now.getDate() - startDate.getDate();
+  
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    let seconds = now.getSeconds();
+  
+    if (days < 0) {
+      months--;
+      const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+      days += prevMonth.getDate();
+    }
+  
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+  
+    return { years, months, days, hours, minutes, seconds };
+  }
 
 
+
+
+  function startLiveCounter(counterEl) {
+    const startDate = new Date(2025, 9, 7, 0, 0, 0);
   
+    function update() {
+      const { years, months, days, hours, minutes, seconds } =
+        getLiveRelationshipTime(startDate);
+  
+      const pad = n => String(n).padStart(2, "0");
+  
+      counterEl.innerHTML = `
+        <div>Gracias por estos:</div>
+        <div>${years} años, ${months} meses, ${days} días</div>
+        <div>${pad(hours)} hr : ${pad(minutes)} min : ${pad(seconds)} seg</div>
+        <div>juntos.</div>
+      `;
+    }
+  
+    update();
+    setInterval(update, 1000);
+  }
+
+
   
 
 
