@@ -993,25 +993,6 @@ function renderCalendar(date){
     calendar.appendChild(div);
   }
 
-  // ================================
-  // 📊 RESUMEN DEL MES (AQUÍ VA)
-  // ================================
-  const summary = getMonthSummary(y, m);
-
-  const resumen = document.createElement("div");
-  resumen.style.marginTop = "10px";
-  resumen.style.fontSize = "14px";
-  resumen.style.color = "#c94b78";
-  resumen.style.textAlign = "center";
-
-  resumen.innerHTML = `
-    <strong>Resumen:</strong><br>
-    ${summary.marked}❤️ | ${summary.unmarked}😢 |
-    ${summary.messages}💌 | ${summary.replies}📤
-  `;
-
-  calendar.appendChild(resumen);
-
   // 🌸 GUÍA PARA EL DÍA ACTUAL (CORRECTAMENTE DENTRO)
   setTimeout(() => {
     const todayISO = today.toISOString().split("T")[0];
@@ -1200,6 +1181,22 @@ function renderMiniCalendar(date) {
 
   container.appendChild(title);
   container.appendChild(grid);
+  // 📊 RESUMEN DEL MES
+  const summary = getMonthSummary(y, m);
+
+  const resumen = document.createElement("div");
+  resumen.style.marginTop = "10px";
+  resumen.style.fontSize = "13px";
+  resumen.style.color = "#c94b78";
+  resumen.style.textAlign = "center";
+
+  resumen.innerHTML = `
+    <strong>Resumen:</strong><br>
+    ${summary.marked}❤️ | ${summary.unmarked}😢 |
+    ${summary.messages}💌 | ${summary.replies}📤
+  `;
+
+  container.appendChild(resumen);
   return container;
 }
 
