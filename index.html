@@ -1092,6 +1092,7 @@ function renderMiniCalendar(date) {
 
     if (d.getMonth() !== m) {
       cell.classList.add("disabled");
+    }
     else if (registro[iso]) {
       cell.textContent =
         registro[iso].estado === "marcado" ? "❤️" : "😢";
@@ -1099,13 +1100,14 @@ function renderMiniCalendar(date) {
       cell.style.cursor = "pointer";
     
       const msg = mensajes[iso];
-      if(msg){
+      if (msg) {
         cell.onclick = () => openPastMessage(iso);
       }
-     } 
-    } else {
+    }
+    else {
       cell.classList.add("disabled");
     }
+
 
     grid.appendChild(cell);
   }
