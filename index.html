@@ -1097,14 +1097,11 @@ function renderMiniCalendar(date) {
       cell.textContent =
         registro[iso].estado === "marcado" ? "❤️" : "😢";
     
-      cell.style.cursor = "pointer";
-    
       const msg = mensajes[iso];
       if (msg) {
-        cell.onclick = () => openPastMessage(iso);
+        addTooltipEvents(cell, msg); // 👈 SOLO tooltip
       }
-    }
-    else {
+    } else {
       cell.classList.add("disabled");
     }
 
