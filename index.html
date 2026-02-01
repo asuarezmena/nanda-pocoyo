@@ -886,8 +886,12 @@ function renderCalendar(date){
     div.classList.add("disabled");
   }
 
-  // 🔴 DÍAS BLOQUEADOS ANTES DEL DÍA 7 (solo del mes actual)
-  else if(d.getMonth() === m && d.getDate() < START_DAY){
+  // 🔴 DÍAS BLOQUEADOS ANTES DEL DÍA 7 (solo del mes enero)
+  else if(
+    d.getMonth() === m &&
+    d.getMonth() === 0 &&      // SOLO EN ENERO
+    d.getDate() < START_DAY
+  ){
     div.classList.add("past");
   }
 
@@ -903,17 +907,18 @@ function renderCalendar(date){
     }
   }
 
-  // 🔴 DÍAS PASADOS (DESPUÉS DEL 7)
-  else if(d < today){
-    div.classList.add("past");
-  }
 
   // 💖 DÍA ACTUAL
   else if(d.getTime() === today.getTime()){
     div.classList.add("today");
     div.onclick = () => markDay(iso, div);
   }
-
+  
+  // 🔴 DÍAS PASADOS
+  else if(d < today){
+    div.classList.add("past");
+  }
+    
   calendar.appendChild(div);
 }
 
@@ -1098,12 +1103,15 @@ function renderHistory(currentDate) {
   const history = document.getElementById("history");
   history.innerHTML = "";
 
-  const pastMonths = getPastMonths(currentDate);
+  const currentMonth = currentDate.getMonth();
+  const year = currentDate.getFullYear();
 
-  pastMonths.forEach(month => {
-    history.appendChild(renderMiniCalendar(month));
-  });
+  for(let m = 0; m < currentMonth; m++){
+    const date = new Date(year, m, 1);
+    history.appendChild(renderMiniCalendar(date));
+  }
 }
+
 
 
 
