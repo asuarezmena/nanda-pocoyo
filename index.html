@@ -909,6 +909,7 @@ fetch(API_URL)
 .then(data => {
   mensajes = data.mensajes;
   registro = data.registro;
+  respuestas = data.respuestas;
   const now = new Date();
   renderCalendar(now);
   renderHistory(now);
@@ -1484,26 +1485,36 @@ function getRelationshipDuration(startDate, currentDate){
 
 
  function getMonthSummary(year, month) {
-    let marked = 0;
-    let totalDays = new Date(year, month + 1, 0).getDate();
-    let messages = 0;
-    let replies = 0;
-  
-    for (let d = 1; d <= totalDays; d++) {
-      const iso = new Date(year, month, d).toISOString().split("T")[0];
-  
-      if (registro[iso]?.estado === "marcado") marked++;
-      if (mensajes[iso]) messages++;
-      if (respuestas?.[iso]) replies += respuestas[iso];
-    }
-  
-    return {
-      marked,
-      unmarked: totalDays - marked,
-      messages,
-      replies
-    };
+  let marked = 0;
+  let unmarked = 0;
+  let messages = 0;
+  let replies = 0;
+
+  for (const iso in registro) {
+    const d = new Date(iso);
+    if (d.getFullYear() !== year || d.getMonth() !== month) continue;
+
+    if (registro[iso].estado === "marcado") marked++;
+    else unmarked++;
   }
+
+  for (const iso in mensajes) {
+    const d = new Date(iso);
+    if (d.getFullYear() === year && d.getMonth() === month) {
+      messages++;
+    }
+  }
+
+  for (const iso in respuestas) {
+    const d = new Date(iso);
+    if (d.getFullYear() === year && d.getMonth() === month) {
+      replies += respuestas[iso];
+    }
+  }
+
+  return { marked, unmarked, messages, replies };
+}
+
 
 
 
