@@ -933,10 +933,6 @@ function renderCalendar(date){
     document.getElementById("monthQuote").textContent = cover.quote;
   }
   
-  
-
-
-
   monthTitle.textContent = date.toLocaleDateString("es", {
     month: "long",
     year: "numeric"
@@ -948,55 +944,81 @@ function renderCalendar(date){
 
   // 🔹 AQUÍ SE DIBUJAN LOS DÍAS
   for(let i = 0; i < 42; i++){
-  const d = new Date(start);
-  d.setDate(start.getDate() + i);
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
 
-  const iso = d.toISOString().split("T")[0];
+    const iso = d.toISOString().split("T")[0];
 
-  const div = document.createElement("div");
-  div.className = "day";
-  div.textContent = d.getDate();
+    const div = document.createElement("div");
+    div.className = "day";
+    div.textContent = d.getDate();
 
-  // 📌 DÍAS DE OTRO MES
-  if(d.getMonth() !== m){
-    div.classList.add("disabled");
-  }
-
-  // 🔴 DÍAS BLOQUEADOS ANTES DEL DÍA 7 (solo enero 2026)
-  else if (
-    d.getFullYear() === 2026 && // 👈 SOLO 2026
-    d.getMonth() === 0 &&      // enero
-    d.getDate() < START_DAY
-  ) {
-    div.classList.add("past");
-  }
-
-  // ❤️ DÍAS YA MARCADOS
-  else if(registro[iso]){
-    div.textContent =
-      registro[iso].estado === "marcado" ? "❤️" : "😢";
-    div.classList.add("marked");
-
-    const msg = mensajes[iso];
-    if(msg){
-      addTooltipEvents(div, msg);
+    // 📌 DÍAS DE OTRO MES
+    if(d.getMonth() !== m){
+      div.classList.add("disabled");
     }
+
+    // 🔴 DÍAS BLOQUEADOS ANTES DEL DÍA 7 (solo enero 2026)
+    else if (
+      d.getFullYear() === 2026 &&
+      d.getMonth() === 0 &&
+      d.getDate() < START_DAY
+    ) {
+      div.classList.add("past");
+    }
+
+    // ❤️ DÍAS YA MARCADOS
+    else if(registro[iso]){
+      div.textContent =
+        registro[iso].estado === "marcado" ? "❤️" : "😢";
+      div.classList.add("marked");
+
+      const msg = mensajes[iso];
+      if(msg){
+        addTooltipEvents(div, msg);
+      }
+    }
+
+    // 💖 DÍA ACTUAL
+    else if(d.getTime() === today.getTime()){
+      div.classList.add("today");
+      div.onclick = () => markDay(iso, div);
+    }
+
+    // 🔴 DÍAS PASADOS
+    else if(d < today){
+      div.classList.add("past");
+    }
+
+    calendar.appendChild(div);
   }
 
+  // ================================
+  // 📊 RESUMEN DEL MES (AQUÍ VA)
+  // ================================
+  const summary = getMonthSummary(y, m);
 
-  // 💖 DÍA ACTUAL
-  else if(d.getTime() === today.getTime()){
-    div.classList.add("today");
-    div.onclick = () => markDay(iso, div);
-  }
-  
-  // 🔴 DÍAS PASADOS
-  else if(d < today){
-    div.classList.add("past");
-  }
-    
-  calendar.appendChild(div);
+  const resumen = document.createElement("div");
+  resumen.style.marginTop = "10px";
+  resumen.style.fontSize = "14px";
+  resumen.style.color = "#c94b78";
+  resumen.style.textAlign = "center";
+
+  resumen.innerHTML = `
+    <strong>Resumen:</strong><br>
+    ${summary.marked}❤️ | ${summary.unmarked}😢 |
+    ${summary.messages}💌 | ${summary.replies}📤
+  `;
+
+  calendar.appendChild(resumen);
 }
+
+
+
+
+
+
+  
 
   // 🌸 👉 JUSTO AQUÍ VA TU BLOQUE (FUERA DEL FOR)
   setTimeout(() => {
@@ -1466,6 +1488,42 @@ function getRelationshipDuration(startDate, currentDate){
 
   
 
+
+
+
+
+
+
+
+ function getMonthSummary(year, month) {
+    let marked = 0;
+    let totalDays = new Date(year, month + 1, 0).getDate();
+    let messages = 0;
+    let replies = 0;
+  
+    for (let d = 1; d <= totalDays; d++) {
+      const iso = new Date(year, month, d).toISOString().split("T")[0];
+  
+      if (registro[iso]?.estado === "marcado") marked++;
+      if (mensajes[iso]) messages++;
+      if (respuestas?.[iso]) replies += respuestas[iso];
+    }
+  
+    return {
+      marked,
+      unmarked: totalDays - marked,
+      messages,
+      replies
+    };
+  }
+
+
+
+
+
+
+
+  
 
 
 
