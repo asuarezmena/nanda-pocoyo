@@ -875,6 +875,8 @@ body{
 </head>
 <body>
 
+  
+
 <div id="intro" class="intro">
   <div class="intro-card">
     <h1>Para ti 💖</h1>
@@ -891,7 +893,12 @@ body{
   </div>
 </div>
 
-
+  
+<nav class="toolbar">
+  <button onclick="showSection('homeSection')">🏠</button>
+  <button onclick="showSection('diarioSection')">💌</button>
+  <button onclick="showSection('gallerySection')">📸</button>
+</nav>
 
 
 <section id="homeSection" class="app-section active">
@@ -1884,11 +1891,7 @@ saveDiaryBtn.onclick = () => {
 
 
 
-<nav class="toolbar">
-  <button onclick="showSection('homeSection')">🏠</button>
-  <button onclick="showSection('diarioSection')">💌</button>
-  <button onclick="showSection('gallerySection')">📸</button>
-</nav>
+
   
 </body>
 </html>
