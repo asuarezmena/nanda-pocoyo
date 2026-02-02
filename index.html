@@ -43,12 +43,8 @@ body{
   gap: 14px;
   box-shadow: 0 12px 30px rgba(200,50,100,.25);
   z-index: 2000;
-
-
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .4s ease;
 }
+
 
 .toolbar button {
   background: none;
@@ -1134,9 +1130,7 @@ function startExperience(){
   }, 800);
 
   localStorage.setItem("introSeen","true");
-
-  document.querySelector(".toolbar").style.opacity = "1";
-  document.querySelector(".toolbar").style.pointerEvents = "auto";
+  
 }
 
 
