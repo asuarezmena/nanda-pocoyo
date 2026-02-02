@@ -1065,7 +1065,9 @@ const modalText = document.getElementById("modalText");
 
 const tooltip = document.getElementById("tooltip");
 
-
+const music = document.getElementById("loveMusic");
+  
+let musicOn = false;
 
 let mensajes = {};
 let registro = {};
@@ -1486,8 +1488,7 @@ function renderHistory(currentDate) {
 
 
 
-const music = document.getElementById("loveMusic");
-let musicOn = false;
+
 
 function playMusic(){
   if(!musicOn){
