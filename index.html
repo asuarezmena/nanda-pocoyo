@@ -36,14 +36,16 @@ body{
   bottom: 14px;
   left: 50%;
   transform: translateX(-50%);
-  background: linear-gradient(135deg,#ff5c8a,#ff87a2);
-  padding: 10px 20px;
-  border-radius: 40px;
+  background: white;
+  padding: 10px 18px;
+  border-radius: 30px;
   display: flex;
-  gap: 16px;
-  box-shadow: 0 14px 35px rgba(200,50,100,.35);
-  z-index: 2000;
+  gap: 14px;
+  box-shadow: 0 12px 30px rgba(200,50,100,.25);
+
+  z-index: 99999; /* 🔥 SUBIRLO SIN MIEDO */
 }
+
 
 
 
@@ -872,7 +874,11 @@ body{
 </head>
 <body>
 
-  
+<nav class="toolbar">
+  <button onclick="showSection('homeSection')">🏠</button>
+  <button onclick="showSection('diarioSection')">💌</button>
+  <button onclick="showSection('gallerySection')">📸</button>
+</nav>
 
 <div id="intro" class="intro">
   <div class="intro-card">
@@ -891,11 +897,7 @@ body{
 </div>
 
   
-<nav class="toolbar">
-  <button onclick="showSection('homeSection')">🏠</button>
-  <button onclick="showSection('diarioSection')">💌</button>
-  <button onclick="showSection('gallerySection')">📸</button>
-</nav>
+
 
 
 <section id="homeSection" class="app-section active">
@@ -1881,6 +1883,15 @@ saveDiaryBtn.onclick = () => {
     document.getElementById(id).classList.add("active");
   }
   
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("🔥 JS cargado, inicializando menú");
+  showSection("homeSection");
+});
   
 
 </script>
