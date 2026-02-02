@@ -20,153 +20,6 @@ body{
 
 
 
-
-
-/* ===== HEADER ===== */
-.app-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 56px;
-  background: #ff5c8a;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  z-index: 99999;
-  color: white;
-}
-
-.header-title {
-  font-weight: 600;
-  font-size: 15px;
-}
-
-.menu-toggle {
-  font-size: 26px;
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  display: none;
-}
-
-/* menú desktop */
-.header-menu {
-  display: flex;
-  gap: 12px;
-}
-
-.header-menu button {
-  background: rgba(255,255,255,.15);
-  border: none;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 14px;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-/* ===== MÓVIL ===== */
-@media (max-width: 768px) {
-  .menu-toggle {
-    display: block;
-  }
-
-  .header-menu {
-    position: fixed;
-    top: 56px;
-    right: -100%;
-    width: 70%;
-    height: calc(100vh - 56px);
-    background: #ff5c8a;
-    flex-direction: column;
-    padding: 20px;
-    gap: 16px;
-    transition: right .3s ease;
-  }
-
-  .header-menu.active {
-    right: 0;
-  }
-
-  .header-menu button {
-    width: 100%;
-    text-align: left;
-    font-size: 16px;
-    padding: 12px;
-  }
-}
-
-/* espacio para que el header no tape contenido */
-body {
-  padding-top: 70px;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-  
-
-
-
-.app-section {
-  display: none;
-}
-
-.app-section.active {
-  display: block;
-}
-
-
-
-
-.toolbar {
-  position: fixed;
-  bottom: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 5000; /* ⬅️ MÁS ALTO QUE EL INTRO */
-}
-
-
-
-
-.toolbar button {
-  color: white;
-  font-size: 22px;
-}
-
-.toolbar button:active {
-  transform: scale(0.9);
-}
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
 .month-counter{
   margin-top:18px;
   padding:14px 18px;
@@ -958,10 +811,81 @@ body {
 
 
 
-.toolbar {
-  background: #ff5c8a !important;
-  border: 3px solid red;
+
+
+
+
+
+
+
+
+
+/* ===== HEADER ===== */
+.top-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 54px;
+  background: #ff5c8a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 9999;
+  box-shadow: 0 6px 18px rgba(200,50,100,.35);
 }
+
+.logo {
+  font-size: 22px;
+}
+
+.menu-btn {
+  font-size: 26px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* PANEL */
+.menu-panel {
+  position: fixed;
+  top: 54px;
+  right: -100%;
+  width: 70%;
+  height: calc(100vh - 54px);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 14px;
+  transition: right .3s ease;
+  box-shadow: -6px 0 20px rgba(200,50,100,.2);
+}
+
+.menu-panel button {
+  background: #ffe3ec;
+  border: none;
+  padding: 12px;
+  border-radius: 14px;
+  font-size: 15px;
+  color: #c2185b;
+  cursor: pointer;
+}
+
+.menu-panel.active {
+  right: 0;
+}
+
+/* espacio para que no tape contenido */
+body {
+  padding-top: 70px;
+}
+
+
+
+  
 
 
 </style>
@@ -971,17 +895,19 @@ body {
 <body>
 
 
-<header class="app-header">
-  <div class="header-title">Nuestro Calendario ❤️</div>
 
-  <button class="menu-toggle" id="menuToggle">☰</button>
+<header class="top-header">
+  <span class="logo">💖</span>
 
-  <div class="header-menu" id="headerMenu">
-    <button onclick="showSection('homeSection')">🏠 Inicio</button>
-    <button onclick="showSection('diarioSection')">💌 Diario</button>
-    <button onclick="showSection('gallerySection')">📸 Galería</button>
+  <button class="menu-btn" id="menuBtn">☰</button>
+
+  <div class="menu-panel" id="menuPanel">
+    <button onclick="scrollToSection('monthTitle')">Calendario</button>
+    <button onclick="scrollToSection('diarioSection')">Mi Diario</button>
+    <button onclick="scrollToSection('history')">Historial</button>
   </div>
 </header>
+
 
 
   
@@ -1001,56 +927,37 @@ body {
   </div>
 </div>
 
-  
 
 
 
-<section id="homeSection" class="app-section active">
-  <div class="month-cover">
-    <div class="heart-photo">
-      <img id="monthImage" src="" alt="Nuestro mes">
+
+<div class="month-cover">
+  <div class="heart-photo">
+  <img id="monthImage" src="" alt="Nuestro mes">
+</div>
+  <p class="month-quote" id="monthQuote"></p>
+
+  <p class="month-counter" id="monthCounter"></p>
+</div>
+
+<h1 id="monthTitle"></h1>
+<div class="calendar-wrapper">
+  <div class="calendar-box">
+    <div class="weekdays">
+      <div>DO</div>
+      <div>LU</div>
+      <div>MA</div>
+      <div>MI</div>
+      <div>JU</div>
+      <div>VI</div>
+      <div>SA</div>
     </div>
-    <p class="month-quote" id="monthQuote"></p>
-    <p class="month-counter" id="monthCounter"></p>
+    <div class="calendar" id="calendar"></div>
   </div>
-
-  <h1 id="monthTitle"></h1>
-  <div class="calendar-wrapper">
-    <div class="calendar-box">
-      <div class="weekdays">
-        <div>DO</div>
-        <div>LU</div>
-        <div>MA</div>
-        <div>MI</div>
-        <div>JU</div>
-        <div>VI</div>
-        <div>SA</div>
-      </div>
-      <div class="calendar" id="calendar"></div>
-    </div>
-  </div>
+</div>
 
 
-
-
-  <h2 class="history-title">Meses anteriores</h2>
-  <div id="history"></div>
-
-  <div class="modal" id="modal">
-    <div class="modal-box">
-      <p id="modalText"></p>
-      <button onclick="openReply()">Responder 💌</button>
-      <br><br>
-      <button onclick="closeModal()">Cerrar</button>
-    </div>
-  </div>
-
-</section>
-
-
-
-
-<section id="diarioSection" class="app-section">
+<section id="diarioSection">
   <h2>Mi Diario 💌</h2>
 
   <button id="openDiaryBtn">✏️ Escribir ahora</button>
@@ -1065,15 +972,8 @@ body {
 
 
 
-<section id="gallerySection" class="app-section">
-  <h2>Galería 📸</h2>
-  <p style="opacity:.6">Próximamente nuestros recuerdos 💕</p>
-</section>
-
-  
 
 
-  
 
 
 <div id="diaryModal" class="modal">
@@ -1090,13 +990,25 @@ body {
 
 
 
-
-
-
+  
+  
 
   
   
-  
+
+<h2 class="history-title">Meses anteriores</h2>
+<div id="history"></div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <p id="modalText"></p>
+    <button onclick="openReply()">Responder 💌</button>
+    <br><br>
+    <button onclick="closeModal()">Cerrar</button>
+  </div>
+</div>
+
+
 
 <div class="modal" id="replyModal">
   <div class="modal-box">
@@ -1170,9 +1082,7 @@ const modalText = document.getElementById("modalText");
 
 const tooltip = document.getElementById("tooltip");
 
-const music = document.getElementById("loveMusic");
-  
-let musicOn = false;
+
 
 let mensajes = {};
 let registro = {};
@@ -1219,7 +1129,6 @@ const monthImages = {
 
 
 function startExperience(){
-  
   music.volume = 0.25;
 
   music.play()
@@ -1240,7 +1149,6 @@ function startExperience(){
   }, 800);
 
   localStorage.setItem("introSeen","true");
-  
 }
 
 
@@ -1593,7 +1501,8 @@ function renderHistory(currentDate) {
 
 
 
-
+const music = document.getElementById("loveMusic");
+let musicOn = false;
 
 function playMusic(){
   if(!musicOn){
@@ -1890,22 +1799,6 @@ function parseISODate(iso){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
   
 
 
@@ -1946,6 +1839,29 @@ function renderDiaryEntry(entry) {
 
 
 
+
+
+
+
+
+const menuBtn = document.getElementById("menuBtn");
+const menuPanel = document.getElementById("menuPanel");
+
+menuBtn.onclick = () => {
+  menuPanel.classList.toggle("active");
+};
+
+function scrollToSection(id){
+  menuPanel.classList.remove("active");
+  document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+}
+
+
+
+
+
+  
+
 const diaryModal = document.getElementById("diaryModal");
 const diaryList = document.getElementById("diaryList");
 const diaryEmpty = document.getElementById("diaryEmpty");
@@ -1976,67 +1892,6 @@ saveDiaryBtn.onclick = () => {
 
 
 
-
-
-
-
-
-
-  function showSection(id) {
-    document.querySelectorAll(".app-section")
-      .forEach(sec => sec.classList.remove("active"));
-  
-    document.getElementById(id).classList.add("active");
-  }
-  
-
-  showSection("homeSection");
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("🔥 JS cargado, inicializando menú");
-  showSection("homeSection");
-});
-
-
-
-
-  if (localStorage.getItem("introSeen") === "true") {
-    const intro = document.getElementById("intro");
-    if (intro) intro.style.display = "none";
-  }
-
-
-
-
-
-
-
-
-
-
-
-  
- const menuToggle = document.getElementById("menuToggle");
-  const headerMenu = document.getElementById("headerMenu");
-  
-  menuToggle.addEventListener("click", () => {
-    headerMenu.classList.toggle("active");
-  });
-  
-  // cerrar menú al cambiar de sección (móvil)
-  document.querySelectorAll(".header-menu button").forEach(btn => {
-    btn.addEventListener("click", () => {
-      headerMenu.classList.remove("active");
-    });
-  });
- 
-
 </script>
-
-
-
-  
 </body>
 </html>
