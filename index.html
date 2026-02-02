@@ -36,14 +36,7 @@ body{
   bottom: 14px;
   left: 50%;
   transform: translateX(-50%);
-  background: white;
-  padding: 10px 18px;
-  border-radius: 30px;
-  display: flex;
-  gap: 14px;
-  box-shadow: 0 12px 30px rgba(200,50,100,.25);
-
-  z-index: 99999; /* 🔥 SUBIRLO SIN MIEDO */
+  z-index: 5000; /* ⬅️ MÁS ALTO QUE EL INTRO */
 }
 
 
@@ -1881,7 +1874,7 @@ saveDiaryBtn.onclick = () => {
   }
   
 
-
+  showSection("homeSection");
 
 
 
@@ -1889,7 +1882,15 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("🔥 JS cargado, inicializando menú");
   showSection("homeSection");
 });
-  
+
+
+
+
+  if (localStorage.getItem("introSeen") === "true") {
+    const intro = document.getElementById("intro");
+    if (intro) intro.style.display = "none";
+  }
+
 
 </script>
 
