@@ -766,7 +766,9 @@ body{
 
 
 
-
+#app {
+  display: none;
+}
 
 
 
@@ -896,17 +898,7 @@ body {
 
 
 
-<header class="top-header">
-  <span class="logo">💖</span>
 
-  <button class="menu-btn" id="menuBtn">☰</button>
-
-  <div class="menu-panel" id="menuPanel">
-    <button onclick="scrollToSection('monthTitle')">Calendario</button>
-    <button onclick="scrollToSection('diarioSection')">Mi Diario</button>
-    <button onclick="scrollToSection('history')">Historial</button>
-  </div>
-</header>
 
 
 
@@ -930,125 +922,138 @@ body {
 
 
 
+<div id="app" style="display:none">
 
-<div class="month-cover">
-  <div class="heart-photo">
-  <img id="monthImage" src="" alt="Nuestro mes">
-</div>
-  <p class="month-quote" id="monthQuote"></p>
-
-  <p class="month-counter" id="monthCounter"></p>
-</div>
-
-<h1 id="monthTitle"></h1>
-<div class="calendar-wrapper">
-  <div class="calendar-box">
-    <div class="weekdays">
-      <div>DO</div>
-      <div>LU</div>
-      <div>MA</div>
-      <div>MI</div>
-      <div>JU</div>
-      <div>VI</div>
-      <div>SA</div>
+  <header class="top-header">
+    <span class="logo">💖</span>
+  
+    <button class="menu-btn" id="menuBtn">☰</button>
+  
+    <div class="menu-panel" id="menuPanel">
+      <button onclick="scrollToSection('monthTitle')">Calendario</button>
+      <button onclick="scrollToSection('diarioSection')">Mi Diario</button>
+      <button onclick="scrollToSection('history')">Historial</button>
     </div>
-    <div class="calendar" id="calendar"></div>
+  </header>
+    
+  <div class="month-cover">
+    <div class="heart-photo">
+    <img id="monthImage" src="" alt="Nuestro mes">
   </div>
-</div>
-
-
-<section id="diarioSection">
-  <h2>Mi Diario 💌</h2>
-
-  <button id="openDiaryBtn">✏️ Escribir ahora</button>
-
-  <div id="diaryEmpty" class="empty-state">
-    No hay registros en tu diario todavía.<br>
-    Puedes escribir algo cuando quieras 💕
+    <p class="month-quote" id="monthQuote"></p>
+  
+    <p class="month-counter" id="monthCounter"></p>
   </div>
-
-  <div id="diaryList"></div>
-</section>
-
-
-
-
-
-
-
-<div id="diaryModal" class="modal">
-  <div class="modal-content">
-    <h3>Escribir en mi diario 💖</h3>
-
-    <input id="diaryTitle" placeholder="Título" />
-    <textarea id="diaryText" placeholder="Escribe lo que sientes..."></textarea>
-
-    <button id="saveDiaryBtn">Guardar</button>
-  </div>
-</div>
-
-
-
-
   
-  
-
-  
-  
-
-<h2 class="history-title">Meses anteriores</h2>
-<div id="history"></div>
-
-<div class="modal" id="modal">
-  <div class="modal-box">
-    <p id="modalText"></p>
-    <button onclick="openReply()">Responder 💌</button>
-    <br><br>
-    <button onclick="closeModal()">Cerrar</button>
-  </div>
-</div>
-
-
-
-<div class="modal" id="replyModal">
-  <div class="modal-box">
-    <h3 style="color:#c2185b;margin-bottom:10px">
-      Escríbeme algo bonito 💖
-    </h3>
-
-    <!-- TEXTAREA -->
-    <textarea id="replyText"
-      placeholder="Escribe aquí con amor… 💕"
-      style="
-        width:100%;
-        height:120px;
-        border-radius:16px;
-        border:1px solid #ffd6e7;
-        padding:12px;
-        font-family:Poppins;
-        resize:none;
-        box-sizing:border-box;
-      "></textarea>
-
-    <!-- MENSAJE ENVIADO (OCULTO) -->
-    <div id="replySuccess" style="display:none;text-align:center;">
-      <div style="font-size:42px;margin-bottom:10px;">💌</div>
-      <p style="font-size:16px;color:#c2185b;">
-        Mensaje enviado con amor
-      </p>
-      <span style="font-size:13px;color:#999;">
-        Gracias por escribir 💖
-      </span>
+  <h1 id="monthTitle"></h1>
+  <div class="calendar-wrapper">
+    <div class="calendar-box">
+      <div class="weekdays">
+        <div>DO</div>
+        <div>LU</div>
+        <div>MA</div>
+        <div>MI</div>
+        <div>JU</div>
+        <div>VI</div>
+        <div>SA</div>
+      </div>
+      <div class="calendar" id="calendar"></div>
     </div>
-
-    <br><br>
-
-    <!-- BOTONES -->
-    <button onclick="sendReply()">Enviar 💕</button>
-    <button onclick="closeReply()">Cancelar</button>
+  </div>
+  
+  
+  <section id="diarioSection">
+    <h2>Mi Diario 💌</h2>
+  
+    <button id="openDiaryBtn">✏️ Escribir ahora</button>
+  
+    <div id="diaryEmpty" class="empty-state">
+      No hay registros en tu diario todavía.<br>
+      Puedes escribir algo cuando quieras 💕
+    </div>
+  
+    <div id="diaryList"></div>
+  </section>
+  
+  
+  
+  
+  
+  
+  
+  <div id="diaryModal" class="modal">
+    <div class="modal-content">
+      <h3>Escribir en mi diario 💖</h3>
+  
+      <input id="diaryTitle" placeholder="Título" />
+      <textarea id="diaryText" placeholder="Escribe lo que sientes..."></textarea>
+  
+      <button id="saveDiaryBtn">Guardar</button>
+    </div>
+  </div>
+  
+  
+  
+  
+    
+    
+  
+    
+    
+  
+  <h2 class="history-title">Meses anteriores</h2>
+  <div id="history"></div>
+  
+  <div class="modal" id="modal">
+    <div class="modal-box">
+      <p id="modalText"></p>
+      <button onclick="openReply()">Responder 💌</button>
+      <br><br>
+      <button onclick="closeModal()">Cerrar</button>
+    </div>
+  </div>
+  
+  
+  
+  <div class="modal" id="replyModal">
+    <div class="modal-box">
+      <h3 style="color:#c2185b;margin-bottom:10px">
+        Escríbeme algo bonito 💖
+      </h3>
+  
+      <!-- TEXTAREA -->
+      <textarea id="replyText"
+        placeholder="Escribe aquí con amor… 💕"
+        style="
+          width:100%;
+          height:120px;
+          border-radius:16px;
+          border:1px solid #ffd6e7;
+          padding:12px;
+          font-family:Poppins;
+          resize:none;
+          box-sizing:border-box;
+        "></textarea>
+  
+      <!-- MENSAJE ENVIADO (OCULTO) -->
+      <div id="replySuccess" style="display:none;text-align:center;">
+        <div style="font-size:42px;margin-bottom:10px;">💌</div>
+        <p style="font-size:16px;color:#c2185b;">
+          Mensaje enviado con amor
+        </p>
+        <span style="font-size:13px;color:#999;">
+          Gracias por escribir 💖
+        </span>
+      </div>
+  
+      <br><br>
+  
+      <!-- BOTONES -->
+      <button onclick="sendReply()">Enviar 💕</button>
+      <button onclick="closeReply()">Cancelar</button>
+    </div>
   </div>
 </div>
-
 
 
 
@@ -1796,7 +1801,12 @@ function parseISODate(iso){
 
 
 
-
+function initApp(){
+  showSection("homeSection");
+  renderCalendar(new Date());
+  loadHistory();
+  startLiveCounter();
+}
 
 
   
@@ -1891,6 +1901,15 @@ saveDiaryBtn.onclick = () => {
 };
 
 
+
+
+
+
+  document.getElementById("startHeart").onclick = () => {
+  document.getElementById("intro").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  initApp();
+};
 
 </script>
 </body>
