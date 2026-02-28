@@ -298,6 +298,13 @@ body{
   padding:30px 25px;
   border-radius:24px;
   max-width:320px;
+
+  max-height:80vh;        /* 👈 límite vertical */
+  overflow:hidden;        /* 👈 evita desbordes externos */
+
+  display:flex;           /* 👈 permite organizar contenido */
+  flex-direction:column;  /* 👈 columna vertical */
+
   box-shadow:0 15px 40px rgba(200,50,100,.25);
   animation:pop .4s ease;
 }
@@ -312,6 +319,10 @@ body{
   font-size:18px;
   line-height:1.5;
   margin-bottom:20px;
+
+  overflow-y:auto;      /* 👈 scroll vertical */
+  max-height:40vh;      /* 👈 altura máxima del mensaje */
+  padding-right:6px;    /* 👈 espacio para scrollbar */
 }
 
 
