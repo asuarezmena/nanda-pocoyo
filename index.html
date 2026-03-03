@@ -1217,8 +1217,22 @@ function openPastMessage(date){
 
   
 function closeModal(){
+
+  const player = document.getElementById("videoPlayer");
+
+  // Detener el video
+  if(player){
+    player.innerHTML = "";
+  }
+
+  // Cerrar modal
   modal.style.display = "none";
   localStorage.removeItem("modalOpen");
+
+  // Reanudar música solo si estaba sonando antes
+  if(music.dataset.wasPlaying === "true"){
+    music.play();
+  }
 }
 
 
@@ -1718,8 +1732,17 @@ function showGuideTooltip(targetEl, text){
 
 
 function openVideo(videoId){
+
   const modal = document.getElementById("videoModal");
   const player = document.getElementById("videoPlayer");
+
+  // ⏸ Pausar música si está sonando
+  if(!music.paused){
+    music.dataset.wasPlaying = "true";
+    music.pause();
+  } else {
+    music.dataset.wasPlaying = "false";
+  }
 
   player.innerHTML = `
     <iframe 
@@ -1732,16 +1755,28 @@ function openVideo(videoId){
   modal.style.display = "flex";
 }
 
+
+
+
+
+
+
+
 function closeVideo(){
+
   const modal = document.getElementById("videoModal");
   const player = document.getElementById("videoPlayer");
 
-  player.innerHTML = ""; // detiene el video
+  // Detener video
+  player.innerHTML = "";
+
   modal.style.display = "none";
+
+  // Reanudar música solo si estaba sonando antes
+  if(music.dataset.wasPlaying === "true"){
+    music.play();
+  }
 }
-
-
-
 
 
 
