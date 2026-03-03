@@ -1152,34 +1152,28 @@ function convertLinksToHTML(text){
 
   const youtubeRegex = /https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/[^\s]+/g;
 
-  text = text.replace(youtubeRegex, function(url){
+  return text.replace(youtubeRegex, function(url){
 
     let videoId = "";
 
     if(url.includes("youtu.be/")){
       videoId = url.split("youtu.be/")[1].split(/[?&]/)[0];
-    } else if(url.includes("watch?v=")){
+    } 
+    else if(url.includes("watch?v=")){
       videoId = url.split("watch?v=")[1].split("&")[0];
     }
 
     if(videoId){
       return `
-        <button 
-          class="love-link" 
-          onclick="openVideo('${videoId}')"
-          style="display:block;margin-top:10px;background:#ff5c8a;color:white;padding:10px 16px;border-radius:20px;border:none;">
-          🎬 Ver sorpresa
-        </button>
+        <a href="#" 
+           onclick="openVideo('${videoId}'); return false;" 
+           class="love-link">
+           ${url}
+        </a>
       `;
     }
 
     return url;
-  });
-
-  const urlRegex = /(https?:\/\/[^\s]+)/g;
-
-  return text.replace(urlRegex, function(url){
-    return `<a href="${url}" target="_blank" class="love-link">${url}</a>`;
   });
 }
 
