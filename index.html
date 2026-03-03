@@ -688,7 +688,16 @@ body{
 
 
 
+.love-link {
+  color: #ff5c8a;
+  font-weight: 600;
+  text-decoration: none;
+  word-break: break-word;
+}
 
+.love-link:hover {
+  text-decoration: underline;
+}
 
 
 
@@ -928,6 +937,15 @@ fetch(API_URL)
   // ❤️ INICIAR CONTADOR EN TIEMPO REAL (UNA SOLA VEZ)
   const counterEl = document.getElementById("monthCounter");
   startLiveCounter(counterEl);
+
+
+  // 💖 REABRIR MODAL SI ESTABA ABIERTO
+  const savedModal = localStorage.getItem("modalOpen");
+  if(savedModal && mensajes[savedModal]){
+    modalText.innerHTML = convertLinksToHTML(mensajes[savedModal]);
+    modal.style.display = "flex";
+  }
+  
 });
 
 
@@ -1037,10 +1055,28 @@ function renderCalendar(date){
 
 
 
+
+
+
+function convertLinksToHTML(text) {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+  return text.replace(urlRegex, function(url) {
+    return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="love-link">${url}</a>`;
+  });
+}
+
+  
+
+
+  
 function markDay(date, el){
-  modalText.textContent = mensajes[date] || "💖 Hoy no había mensaje, pero te amo";
+  modalText.innerHTML = convertLinksToHTML(
+    mensajes[date] || "💖 Hoy no había mensaje, pero te amo"
+  );
 
   modal.style.display = "flex";
+  localStorage.setItem("modalOpen", date);
 
   fetch(API_URL, {
     method: "POST",
@@ -1060,8 +1096,9 @@ function markDay(date, el){
 
 
 function openPastMessage(date){
-  modalText.textContent =
-    mensajes[date] || "💭 Este día no tenía mensaje guardado";
+  modalText.innerHTML = convertLinksToHTML(
+    mensajes[date] || "💭 Este día no tenía mensaje guardado"
+  );
 
   modal.style.display = "flex";
 }
@@ -1070,6 +1107,7 @@ function openPastMessage(date){
   
 function closeModal(){
   modal.style.display = "none";
+  localStorage.removeItem("modalOpen");
 }
 
 
@@ -1564,6 +1602,14 @@ function showGuideTooltip(targetEl, text){
     tooltip.classList.remove("show", "pulse");
   }, 5000);
 }
+
+
+
+
+
+
+
+
 
 
 </script>
