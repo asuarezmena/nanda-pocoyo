@@ -1083,25 +1083,23 @@ function renderCalendar(date){
 
 function convertLinksToHTML(text) {
 
-  // 🎬 Detectar YouTube
   const youtubeRegex = /https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/[^\s]+/g;
+
+  // Primero extraemos los videos y los guardamos
+  let videos = [];
 
   text = text.replace(youtubeRegex, function(url) {
 
     let videoId = "";
 
-    // Caso corto youtu.be
     if(url.includes("youtu.be/")){
       videoId = url.split("youtu.be/")[1].split(/[?&]/)[0];
-    }
-
-    // Caso largo youtube.com/watch?v=
-    else if(url.includes("watch?v=")){
+    } else if(url.includes("watch?v=")){
       videoId = url.split("watch?v=")[1].split("&")[0];
     }
 
     if(videoId){
-      return `
+      const embedHTML = `
         <div class="video-container">
           <iframe 
             src="https://www.youtube.com/embed/${videoId}"
@@ -1111,17 +1109,28 @@ function convertLinksToHTML(text) {
           </iframe>
         </div>
       `;
+
+      videos.push(embedHTML);
+
+      return `%%VIDEO_${videos.length - 1}%%`;
     }
 
     return url;
   });
 
-  // 🔗 Detectar otros links normales
+  // Ahora convertimos SOLO links normales
   const urlRegex = /(https?:\/\/[^\s]+)/g;
 
-  return text.replace(urlRegex, function(url) {
+  text = text.replace(urlRegex, function(url) {
     return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="love-link">${url}</a>`;
   });
+
+  // Finalmente volvemos a insertar los videos
+  videos.forEach((video, index) => {
+    text = text.replace(`%%VIDEO_${index}%%`, video);
+  });
+
+  return text;
 }
 
   
