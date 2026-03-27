@@ -777,6 +777,76 @@ body{
   cursor:pointer;
 }
 
+
+
+
+
+
+
+
+
+
+/* 🎂 MODAL FONDO */
+.cake-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(8px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+  animation:fadeIn .4s ease;
+}
+
+.cake-wrapper{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  animation:pop .5s ease;
+}
+
+.cake-img{
+  width:260px;
+  margin-bottom:-40px;
+  z-index:2;
+  animation:floatCake 3s ease-in-out infinite;
+}
+
+.cake-card{
+  background:white;
+  width:300px;
+  padding:60px 20px 25px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 20px 40px rgba(0,0,0,.25);
+}
+
+.cake-card h2{
+  color:#ff4f87;
+  margin-bottom:12px;
+}
+
+.cake-card p{
+  color:#555;
+  font-size:15px;
+  margin-bottom:18px;
+}
+
+.cake-card button{
+  background:linear-gradient(45deg,#ff4f87,#ff7eb3);
+  border:none;
+  padding:10px 20px;
+  border-radius:25px;
+  color:white;
+  cursor:pointer;
+}
+
+@keyframes floatCake{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+
 </style>
 
 
@@ -900,9 +970,79 @@ body{
 
 
 
+<!-- 🎂 HTML -->
+<div id="birthdayModal" class="cake-modal">
+  <div class="cake-wrapper">
+
+    <img class="cake-img"
+      src="https://raw.githubusercontent.com/asuarezmena/nanda-pocoyo/main/img/pastel.png">
+
+    <div class="cake-card">
+      <h2>🎉 ¡Feliz Cumpleaños! 🎂</h2>
+      <p>
+        Hoy es un día especial… porque nació alguien
+        que siempre voy a recordar con cariño 💖 💖
+      </p>
+
+      <button onclick="closeCake()">Cerrar 💕</button>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- 🎂 DESEO -->
+<div id="wishModal" class="cake-modal">
+  <div class="cake-wrapper">
+
+    <img id="cakeWithCandle" class="cake-img"
+      src="https://raw.githubusercontent.com/asuarezmena/nanda-pocoyo/main/img/pastel.gif">
+
+    <div class="cake-card">
+      <h2>🎂 Escribe un deseo</h2>
+      <p>Hoy es tu momento… escribe algo bonito 💖</p>
+
+      <textarea id="wishText"
+        placeholder="Escribe tu deseo aquí… ✨"
+        style="
+        width:100%;
+        height:100px;
+        border-radius:16px;
+        border:1px solid #ffd6e7;
+        padding:12px;
+        font-family:Poppins;
+        resize:none;
+        box-sizing:border-box;
+      "></textarea>
+
+      <br><br>
+
+      <button onclick="saveWish()">Guardar deseo 💕</button>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
 
 <audio id="loveMusic" loop>
-  <source src="https://raw.githubusercontent.com/asuarezmena/nanda-pocoyo/main/audio/Rio%20Roma%20-%20Por%20Eso%20Te%20Amo.mp3" type="audio/mpeg">
+  <source src="https://raw.githubusercontent.com/asuarezmena/nanda-pocoyo/main/audio/Cumple.mp3" type="audio/mpeg">
 </audio>
 
 <button class="music-toggle" onclick="toggleMusic()">🔈</button>
@@ -936,6 +1076,9 @@ let registro = {};
 let respuestas = {};
 
 
+
+
+let skipWish = false;
 
 
 const monthImages = {
@@ -1220,21 +1363,24 @@ function closeModal(){
 
   const player = document.getElementById("videoPlayer");
 
-  // Detener el video
   if(player){
     player.innerHTML = "";
   }
 
-  // Cerrar modal
   modal.style.display = "none";
   localStorage.removeItem("modalOpen");
 
-  // Reanudar música solo si estaba sonando antes
+  // 🔥 MOSTRAR DESEO SI ES FECHA ESPECIAL
+ if(!skipWish){
+  setTimeout(() => {
+    openWishModal();
+  }, 400);
+}
+
   if(music.dataset.wasPlaying === "true"){
     music.play();
   }
 }
-
 
 
 
@@ -1528,17 +1674,23 @@ function sendReply(){
 
     // cerrar modal suavemente
     setTimeout(() => {
-      closeReply();
-      closeModal();
+  closeReply();
+  skipWish = true;
+  closeModal();
 
-      // reset
-      textArea.value = "";
-      textArea.style.display = "";
-      success.style.display = "none";
-      success.classList.remove("reply-fade");
+  // 🔥 abrir deseo después de responder
+  setTimeout(() => {
+    openWishModal();
+    skipWish = false;
+  }, 500);
 
-      document.querySelector("#replyModal button").style.display = "";
-    }, 2500);
+  textArea.value = "";
+  textArea.style.display = "";
+  success.style.display = "none";
+  success.classList.remove("reply-fade");
+
+  document.querySelector("#replyModal button").style.display = "";
+}, 2500);
   });
 }
 
@@ -1780,6 +1932,107 @@ function closeVideo(){
 
 
 
+
+
+
+
+
+
+/* ========================= */
+/* 🎂 FUNCIONES CUMPLEAÑOS */
+/* ========================= */
+
+function showCake(){
+  const today = new Date();
+  const month = today.getMonth();
+  const day = today.getDate();
+
+  // 🔥 EDITA AQUÍ
+  if(month === 2 && day === 26){
+    document.getElementById("birthdayModal").style.display = "flex";
+  }
+}
+
+function closeCake(){
+  document.getElementById("birthdayModal").style.display = "none";
+}
+
+/* ========================= */
+/* 💖 MODIFICACIÓN EXISTENTE */
+/* ========================= */
+
+function startExperience(){
+  music.volume = 0.25;
+
+  music.play()
+    .then(() => {
+      musicOn = true;
+    })
+    .catch(err => {
+      console.log("Audio bloqueado", err);
+    });
+
+  const intro = document.getElementById("intro");
+  intro.style.transition = "opacity .8s ease";
+  intro.style.opacity = "0";
+  intro.style.pointerEvents = "none";
+
+  setTimeout(() => {
+    intro.style.display = "none";
+  }, 800);
+
+  // 🎂 DISPARAR CUMPLEAÑOS
+  setTimeout(() => {
+    showCake();
+  }, 900);
+
+  localStorage.setItem("introSeen","true");
+}
+
+
+
+
+
+
+
+
+
+
+
+function isSpecialDay(){
+  const today = new Date();
+  return today.getMonth() === 2 && today.getDate() === 26;
+}
+
+
+
+
+
+function openWishModal(){
+  if(!isSpecialDay()) return;
+
+  document.getElementById("wishModal").style.display = "flex";
+}
+
+
+
+
+
+function saveWish(){
+  const text = document.getElementById("wishText").value.trim();
+  if(!text) return;
+
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      tipo: "deseo",
+      fecha: new Date().toISOString().split("T")[0],
+      mensaje: text
+    })
+  });
+
+  document.getElementById("wishModal").style.display = "none";
+}
 
 </script>
 </body>
