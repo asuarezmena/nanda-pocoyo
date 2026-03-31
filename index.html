@@ -1042,7 +1042,7 @@ body{
 
 
 <audio id="loveMusic" loop>
-  <source src="https://raw.githubusercontent.com/asuarezmena/nanda-pocoyo/main/audio/CuandoNadieVe.mp3" type="audio/mpeg">
+  <source src="https://cdn.jsdelivr.net/gh/asuarezmena/nanda-pocoyo/audio/CuandoNadieVe.mp3" type="audio/mpeg">
 </audio>
 
 <button class="music-toggle" onclick="toggleMusic()">🔈</button>
@@ -1059,6 +1059,10 @@ body{
 <script>
 
 const API_URL = "https://script.google.com/macros/s/AKfycbybPDdOWcpzwZvVEDxyEVmgbIju7hRTqSfyVdylDWM9uVqgobb_RGdxKwhNsYJBrYjKjQ/exec";
+
+const BREAKUP_DATE = new Date("2026-03-13");
+const REUNION_DATE = null; //esto es fecha para reconciliación
+
 
 const calendar = document.getElementById("calendar");
 const monthTitle = document.getElementById("monthTitle");
@@ -1122,28 +1126,7 @@ const monthImages = {
 
 
 
-function startExperience(){
-  music.volume = 0.25;
 
-  music.play()
-    .then(() => {
-      musicOn = true;
-    })
-    .catch(err => {
-      console.log("Audio bloqueado hasta interacción", err);
-    });
-
-  const intro = document.getElementById("intro");
-  intro.style.transition = "opacity .8s ease";
-  intro.style.opacity = "0";
-  intro.style.pointerEvents = "none";
-
-  setTimeout(() => {
-    intro.style.display = "none";
-  }, 800);
-
-  localStorage.setItem("introSeen","true");
-}
 
 
 
@@ -1236,8 +1219,7 @@ function renderCalendar(date){
 
     // ❤️ DÍAS YA MARCADOS
     else if(registro[iso]){
-      div.textContent =
-        registro[iso].estado === "marcado" ? "❤️" : "😢";
+      div.textContent = getHeartType(iso);
       div.classList.add("marked");
 
       const msg = mensajes[iso];
@@ -1348,7 +1330,7 @@ function markDay(date, el){
   el.className = "day marked";
 
   confettiHearts();
-  playMusic();
+  //playMusic();
 }
 
 
@@ -1489,8 +1471,7 @@ function renderMiniCalendar(date) {
       cell.classList.add("disabled");
     }
     else if (registro[iso]) {
-      cell.textContent =
-        registro[iso].estado === "marcado" ? "❤️" : "😢";
+      cell.textContent = getHeartType(iso);
     
       const msg = mensajes[iso];
       if (msg) {
@@ -1565,11 +1546,15 @@ function renderHistory(currentDate) {
 const music = document.getElementById("loveMusic");
 let musicOn = false;
 
+
+
 function playMusic(){
-  if(!musicOn){
+  if(music.paused){
     music.volume = 0.3;
-    music.play();
-    musicOn = true;
+
+    music.play().catch(err => {
+      console.log("No se pudo reproducir:", err);
+    });
   }
 }
 
@@ -2037,6 +2022,39 @@ function saveWish(){
 
   document.getElementById("wishModal").style.display = "none";
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getHeartType(iso){
+  const d = new Date(iso);
+
+  if(!registro[iso] || registro[iso].estado !== "marcado"){
+    return "😢";
+  }
+
+  if(d < BREAKUP_DATE){
+    return "❤️";
+  }
+
+  if(REUNION_DATE && d >= REUNION_DATE){
+    return "❤️";
+  }
+
+  return "💔";
+}
+
 
 </script>
 </body>
